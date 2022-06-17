@@ -5,7 +5,7 @@ var app = express();
 var fs = require("fs");
 
 
-mongoose.connect('mongodb://db_user:ThreePoints2@localhost:55000/fsd-formula1',
+mongoose.connect('mongodb://db_user:ThreePoints2@localhost:27017/fsd-formula1',
   {
     useNewUrlParser: true,
     useUnifiedTopology: true
