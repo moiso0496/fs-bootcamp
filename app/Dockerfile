@@ -3,7 +3,7 @@ FROM node:17-slim
 
 # Set the work directory to app folder. 
 # We will be copying our code here
-WORKDIR /usr/src
+WORKDIR  /usr/src/drivers/api
 
 
 #Copy package.json file in the node folder inside container
@@ -19,4 +19,4 @@ COPY . .
 EXPOSE 3000
 
 # Run the node server with server.js file
-CMD ["node", "./app/server.js"]
+CMD [ "node", "server.js"]
