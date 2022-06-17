@@ -5,7 +5,7 @@ var app = express();
 var fs = require("fs");
 
 
-mongoose.connect('mongodb://db_user:ThreePoints2@localhost:55000/fsd-formula1',
+mongoose.connect('mongodb://writter:threepoints@172.24.2.3:27017/fsd-formula1',
   {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -20,6 +20,6 @@ db.once("open", function () {
 
 app.use(Router);
 
-app.listen(3001, () => {
-  console.log("Server is running at port 3001");
+app.listen(3000, () => {
+  console.log("Server is running at port 3000");
 });
