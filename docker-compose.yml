@@ -1,0 +1,17 @@
+version: '2.6.0'
+services:
+
+  node_api:
+    build: app
+    ports:
+      - "3000:3000"
+    expose:
+      - '3000'
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
