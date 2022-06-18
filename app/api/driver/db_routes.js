@@ -5,7 +5,7 @@ const app = express();
 
 var jsonParser = bodyParser.json()
 
-app.post("/add_driver",jsonParser, async (request, response) => {
+app.post("/driver",jsonParser, async (request, response) => {
     const driver = new driverModel(request.body);
   
     try {
@@ -16,7 +16,7 @@ app.post("/add_driver",jsonParser, async (request, response) => {
     }
 });
 
-app.get("/drivers", async (request, response) => {
+app.get("/driver", async (request, response) => {
     const drivers = await driverModel.find({});
   
     try {
@@ -26,7 +26,7 @@ app.get("/drivers", async (request, response) => {
     }
   });
 
-app.get("/get_driver_by_team", async (request, response) =>{
+app.get("/get_driver", async (request, response) =>{
   let team = request.query.team
   const drivers = await driverModel.find({"driver_team" : team});
 
@@ -39,7 +39,7 @@ app.get("/get_driver_by_team", async (request, response) =>{
 
 });
 
-app.put("/update_driver_team",jsonParser, async (request,response) =>{
+app.put("/driver",jsonParser, async (request,response) =>{
   const driver = await driverModel.updateOne({"driver_num" : request.body.driver_num}, {"driver_team": request.body.driver_team})
   try {
     if (await driver.acknowledged){
@@ -48,6 +48,24 @@ app.put("/update_driver_team",jsonParser, async (request,response) =>{
   } catch (error) {
     response.status(500).send(error);
   }
+});
+
+app.delete("/driver", async (request,response)=>{
+  let driver_num = request.query.driver_num;
+  const drivers = await driverModel.deleteMany({"driver_num" : driver_num});
+
+  try {
+    if (drivers.deletedCount == 0){
+      response.statusCode = 204
+      response.send()
+    } else{
+      response.statusCode = 200
+      response.send("Driver " + driver_num + " deleted successfully.")
+    }
+  } catch (error) {
+    response.status(500).send(error);
+  }
+
 });
 
 module.exports = app;
