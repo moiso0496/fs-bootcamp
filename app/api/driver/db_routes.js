@@ -12,7 +12,7 @@ app.post("/driver",jsonParser, async (request, response) => {
       await driver.save();
       response.send(driver);
     } catch (error) {
-      response.status(500).send(error);
+      response.status(400).send(error);
     }
 });
 
@@ -22,7 +22,7 @@ app.get("/driver", async (request, response) => {
     try {
       response.send(drivers);
     } catch (error) {
-      response.status(500).send(error);
+      response.status(400).send(error);
     }
   });
 
@@ -33,20 +33,27 @@ app.get("/get_driver", async (request, response) =>{
   try {
     response.send(drivers);
   } catch (error) {
-    response.status(500).send(error);
+    response.status(400).send(error);
   }
 
 
 });
 
 app.put("/driver",jsonParser, async (request,response) =>{
-  const driver = await driverModel.updateOne({"driver_num" : request.body.driver_num}, {"driver_team": request.body.driver_team})
+  const driver = await driverModel.updateOne({"driver_num" : request.body.driver_num}, {"driver_team": request.body.driver_team, "driver_name": request.body.driver_name})
   try {
     if (await driver.acknowledged){
-      response.send(driver);
+      if(await driver.modifiedCount != 0){
+        response.status(200).send("Driver with number " + request.body.driver_num + "  was updated successfully.")
+      } else {
+        const new_driver = new driverModel(request.body);
+        await new_driver.save();
+        response.status(201).send("Driver with number " + request.body.driver_num + "  was created successfully.")
+        
+      }
     }
   } catch (error) {
-    response.status(500).send(error);
+    response.status(400).send(error);
   }
 });
 
@@ -58,12 +65,16 @@ app.delete("/driver", async (request,response)=>{
     if (drivers.deletedCount == 0){
       response.statusCode = 204
       response.send()
+    } else if (drivers.deletedCount>1){
+      response.statusCode = 200
+      response.send("Drivers with number " + driver_num + " were deleted successfully.")
     } else{
       response.statusCode = 200
-      response.send("Driver " + driver_num + " deleted successfully.")
+      response.send("Driver with number " + driver_num + "  was deleted successfully.")
+
     }
   } catch (error) {
-    response.status(500).send(error);
+    response.status(400).send(error);
   }
 
 });

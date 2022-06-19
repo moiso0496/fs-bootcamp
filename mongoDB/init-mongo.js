@@ -11,6 +11,7 @@ db.createUser(
     });
 
 db.createCollection('drivers');
+db.getCollection('drivers').createIndex({driver_num:1}, {unique:true})
 db.drivers.insertOne(
     {
         "driver_num": 44,
